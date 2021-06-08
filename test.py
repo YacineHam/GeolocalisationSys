@@ -3,6 +3,8 @@ import asyncio
 import json
 import websockets
 
+#SECIND COMMIT
+
 async def hello():
     uri = "ws://127.0.0.1:8000/ws/test/"
     async with websockets.connect(uri) as websocket:
