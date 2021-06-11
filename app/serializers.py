@@ -20,14 +20,7 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Location
         fields = ['longitude','latitude']
-<<<<<<< HEAD
         
-        
-=======
-
- 
-            
->>>>>>> 15f087598841a8525b0721909a1c45b7afceb18d
         def create(self, validated_data):
             return Location.objects.create(**validated_data)  
     
