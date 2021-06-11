@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "app",
     "channels",
     'rest_framework',
+    'rest_framework_jwt',
     
 ]
 ASGI_APPLICATION = 'Geolocalisation_System.asgi.application'
