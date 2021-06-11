@@ -18,7 +18,7 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS= []
-    object = CustomUserManager()
+    objects = CustomUserManager()
     
     def __str__(self):
         return self.email
@@ -51,7 +51,7 @@ class Location(models.Model):
             else:
                 return True
 
-    def validate_latitude(value):
+    def validate_latitude(self):
             if self.latitude<=-90 or self.latitude>=90:
                 return False
             else:
