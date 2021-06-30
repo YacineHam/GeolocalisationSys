@@ -8,25 +8,26 @@ from .managers import CustomUserManager
 
     
 class CustomUser(AbstractBaseUser,PermissionsMixin):
+    #ADD KEYS fields
     id          = models.AutoField(primary_key=True)
-    email       = models.EmailField("Email Adress",unique=True)
+    username    = models.CharField("Username",unique=True,max_length=50)
     is_car      = models.BooleanField(default=False)
     is_staff    = models.BooleanField(default=False)
     is_active   = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
     
     
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "username"
     REQUIRED_FIELDS= []
     objects = CustomUserManager()
     
     def __str__(self):
-        return self.email
+        return self.username
     
     
 
 class Location(models.Model):
-    
+    #change lang lat fields to string encrypted
     car       =models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     longitude =models.FloatField(validators=
                                 [MinValueValidator(-180,message="value must be in range [-180,180]"),
