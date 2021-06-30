@@ -11,16 +11,37 @@ import json
 import websockets
 
 
+from AESCipher import AESCipher
+from Crypto import Random
+from Crypto.Cipher import AES
+
+import rsa
+
+host = '10.42.0.1:8000'
+http_host = 'http://' + host
+ws_host = 'ws://' + host
+ws_url = ws_host + '/ws/test/'
+auth_url = http_host + '/api/token/'
+refresh_url = auth_url + '/refresh'
+rsa_url = http_host + '/rsakey'
+aes_url = http_host + '/aeskey'
+name = 'test@test.test'
+passwd = 'test'
 class Car:
 
     name = ''
     passwd = ''
     access_token = ''
     refresh_token = ''
+    aes_key= Random.new().read(AES.block_size)
+
 
     def __init__(self,name,passwd):
         self.name = name
         self.passwd = passwd
+        self.aes_key = Random.new().read(AES.block_size)
+        self.aes_cipher = AESCipher(mycar.aes_key)
+        self.rsa_enc_aes(self, rsa_url)
 
     def authen(self,url):
         data = json.dumps({'email':self.name, 'password':self.passwd})
@@ -32,13 +53,33 @@ class Car:
         self.access_token = res['access']
         self.refresh_token = res['refresh']
 
-    def refresh(self,url):
+    def refresh(self, url):
         data = json.dumps({'refresh':self.refresh_token})
         headers = {
             "Content-type": "application/json",
         }
         res = json.loads(requests.post(url,data,headers=headers).text)
         self.access_token = res['access']
+
+
+    def rsa_enc_aes(self, url): #/rsakey
+        data = json.dumps({'access':self.access_token,})
+        headers = {
+            "Content-type": "application/json",
+        }
+        res = json.loads(requests.post(url, data, headers=headers).text)
+        rsa_pubkey = rsa.PublicKey(res['pubkey']['n'],res['pubkey']['e'])
+
+        enc_aes_key = rsa.encrypt(self.aes_key, rsa_pubkey)
+        self.send_aes_key(enc_aes_key, aes_url)
+
+
+    def send_aes_key(self, enc_aes_key, url): #/aeskey
+        data = json.dumps({'access':self.access_token, 'aes_key':enc_aes_key,})
+        headers = {
+            "Content-type": "application/json",
+        }
+        requests.post(url,data,headers=headers)
 
 
     async def get_send_location(self,url) :
@@ -57,7 +98,9 @@ class Car:
                     newmsg = pynmea2.parse(newdata)
                     lat = newmsg.latitude
                     lng = newmsg.longitude
-
+                    #encryption
+                    lat = self.aes_cipher.encrypt(lat)
+                    lng = self.aes_cipher.encrypt(lng)
                     data = json.dumps({'latitude':lat, 'longitude':lng})
                     await websocket.send(data)
 
@@ -66,9 +109,7 @@ class Car:
 
 
 if __name__=='__main__' :
-    host = '10.42.0.1:8000'
-    name = 'test@test.test'
-    passwd = 'test'
+
     mycar = Car(name,passwd)
-    mycar.authen('http://' + host + '/api/token/')
-    asyncio.get_event_loop().run_until_complete(mycar.get_send_location('ws://' + host + '/ws/test/?token=' + mycar.access_token))
+    mycar.authen( auth_url )
+    asyncio.get_event_loop().run_until_complete(mycar.get_send_location( ws_url + '?token=' + mycar.access_token))
