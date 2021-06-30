@@ -11,7 +11,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+import rsa
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -134,3 +134,11 @@ ASGI_APPLICATION = "Geolocalisation_System.asgi.application"
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+#with open('/home/yacineham213/Desktop/s2/prjt/GeolocalisationSys/secret_key.txt') as f:
+#        KEYS= f.read().strip().split()
+#        RSA_PUBLIC_KEY = KEYS[0]
+#        RSA_PRIVATE_KEY = KEYS[1]
+(pubKey,privateKey)=rsa.newkeys(512)
+RSA_PUBLIC_KEY = pubKey
+RSA_PRIVATE_KEY = privateKey

@@ -1,23 +1,21 @@
 from django.db import models
 from django.core.validators import MaxValueValidator,MinValueValidator
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser,AbstractUser
 from django.contrib.auth.models import PermissionsMixin
 from django.utils import timezone
 from .managers import CustomUserManager
 # Create your models here.
 
     
-class CustomUser(AbstractBaseUser,PermissionsMixin):
-    #ADD KEYS fields
-    id          = models.AutoField(primary_key=True)
-    username    = models.CharField("Username",unique=True,max_length=50)
+class CustomUser(AbstractUser):
+    
     is_car      = models.BooleanField(default=False)
     is_staff    = models.BooleanField(default=False)
     is_active   = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
+    aes_key     = models.CharField(max_length=500,default="")
     
     
-    USERNAME_FIELD = "username"
     REQUIRED_FIELDS= []
     objects = CustomUserManager()
     
@@ -28,6 +26,7 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
 
 class Location(models.Model):
     #change lang lat fields to string encrypted
+    
     car       =models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     longitude =models.FloatField(validators=
                                 [MinValueValidator(-180,message="value must be in range [-180,180]"),
