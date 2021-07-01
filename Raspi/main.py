@@ -3,7 +3,6 @@ import requests
 
 import serial
 import time
-import string 
 import pynmea2
 
 import asyncio
@@ -106,9 +105,9 @@ class Car:
                 
                     newmsg = pynmea2.parse(newdata)
                     #lat = 20 
-                    newmsg.latitude
+                    lat = newmsg.latitude
                     #lng = 30 
-                    newmsg.longitude
+                    lng = newmsg.longitude
                     
                     lat = b64encode(self.aes_cipher.encrypt(lat)).decode()
                     lng = b64decode(self.aes_cipher.encrypt(lng)).decode()
