@@ -10,7 +10,6 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from jwt import decode as jwt_decode
 from django.conf import settings
 from .models import CustomUser,Location
-#from AesEverywhere import aes256
 from .AESCipher import AESCipher
 from base64 import b64decode
 class TestConsumer(WebsocketConsumer):
