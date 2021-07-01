@@ -2,7 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import Location,CustomUser
 from .forms import CustomUserCreationForm, CustomUserChangeForm
+from django.utils.translation import ugettext_lazy
 class CustomUserAdmin(UserAdmin):
+    admin.site.site_header = 'Geolocalisation System'
+    admin.site.site_url = "/map"
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
@@ -22,6 +25,28 @@ class CustomUserAdmin(UserAdmin):
 
     search_fields = ('username',)
     ordering = ('username',)
+    
+    #def login(self, request, extra_context=None):
+    #    """
+    #    Displays the login form for the given HttpRequest.
+    #    """
+    #    from django.contrib.auth.views import login
+    #    context = {
+    #        'title': _('Log in'),
+    #        'app_path': request.get_full_path(),
+    #        REDIRECT_FIELD_NAME: settings.ADMIN_LOGIN_REDIRECT_URL,
+    #    }
+    #    context.update(extra_context or {})
+#
+    #    defaults = {
+    #        'extra_context': context,
+    #        'current_app': self.name,
+    #        'authentication_form': self.login_form or AdminAuthenticationForm,
+    #        'template_name': self.login_template or 'admin/login.html',
+    #    }
+    #    return login(request, **defaults) 
+    
+
 
 
 admin.site.register(Location)

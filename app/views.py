@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import *
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
+from datetime import datetime, timedelta
 from base64 import b64decode,b64encode
 
 from rest_framework.views import APIView
@@ -15,19 +15,31 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.tokens import UntypedToken
 from jwt import decode as jwt_decode
 from Geolocalisation_System import settings 
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required
 
-
-
+@user_passes_test(lambda u: u.is_staff)
+@login_required(login_url='/admin/')
 def map(request):
     users = CustomUser.objects.filter(is_car=True)
     print(users)
     return render(request, 'map.html', {'users': users})
 
+
+@user_passes_test(lambda u: u.is_staff)
 @api_view(['GET'])
 def get_current_location(request, id):
     car =CustomUser.objects.get(id=id)
     location = Location.objects.filter(car=car).last()
     return Response({"geometry": {"type": "Point", "coordinates": [location.longitude, location.latitude]}, "type": "Feature", "properties": {}})
+
+@api_view(['GET'])
+def get_history(request, id, time):
+    interval = datetime.now() - timedelta(hours=time)
+    car =CustomUser.objects.get(id=id)
+    locations = Location.objects.filter(car=car,timestamp__gte = interval).order_by("timestamp")
+    print([locations.longitude, locations.latitude])
+    return Response([locations.longitude, locations.latitude])
 
 
 

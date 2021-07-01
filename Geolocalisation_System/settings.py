@@ -8,10 +8,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+import rsa
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-import rsa
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -139,6 +139,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 #        KEYS= f.read().strip().split()
 #        RSA_PUBLIC_KEY = KEYS[0]
 #        RSA_PRIVATE_KEY = KEYS[1]
+
+
 (pubKey,privateKey)=rsa.newkeys(512)
 RSA_PUBLIC_KEY = pubKey
 RSA_PRIVATE_KEY = privateKey
+
+ADMIN_LOGIN_REDIRECT_URL="/map"
+LOGIN_URL = '/admin'

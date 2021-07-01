@@ -11,7 +11,7 @@ from jwt import decode as jwt_decode
 from django.conf import settings
 from .models import CustomUser,Location
 from .AESCipher import AESCipher
-from base64 import b64decode
+
 class TestConsumer(WebsocketConsumer):
 
     def connect(self):
