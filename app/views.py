@@ -3,8 +3,7 @@ from .models import *
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from datetime import datetime, timedelta
-from base64 import b64decode,b64encode
-
+from base64 import b64decode
 from rest_framework.views import APIView
 import rsa
 from django.http import JsonResponse

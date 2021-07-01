@@ -3,9 +3,14 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Location,CustomUser
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.utils.translation import ugettext_lazy
+
+
 class CustomUserAdmin(UserAdmin):
+    
     admin.site.site_header = 'Geolocalisation System'
-    admin.site.site_url = "/map"
+    admin.site.index_title = "Geolocalisation System"
+    admin.site.site_title = "Geolocalisation System"
+    admin.site.site_url = "/"
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
@@ -25,6 +30,8 @@ class CustomUserAdmin(UserAdmin):
 
     search_fields = ('username',)
     ordering = ('username',)
+    
+
     
     #def login(self, request, extra_context=None):
     #    """

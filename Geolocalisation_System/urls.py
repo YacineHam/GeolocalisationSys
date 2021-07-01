@@ -23,11 +23,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('map/',map,name="map"),
+    path('',map,name="map"),
     path('current/<int:id>/',get_current_location,name="current"),
     path('history/<int:id>/',get_history,name="history"),
     path('rsakey/',GetRsaKey.as_view(),name="rsakey"),
-    path('aeskey/',StoreAesKey.as_view(),name="aeskey")
-
+    path('aeskey/',StoreAesKey.as_view(),name="aeskey"),
 ]
   
