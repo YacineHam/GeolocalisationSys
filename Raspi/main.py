@@ -101,7 +101,8 @@ class Car:
                 newdata = ser.readline().decode()
                 #print(newdata[0:6])
                 
-                if newdata[0:6]=="$GPRMC" or True:
+                #if newdata[0:6]=="$GPRMC" :
+                if True :
                 
                     newmsg = pynmea2.parse(newdata)
                     #lat = 20 
@@ -109,8 +110,8 @@ class Car:
                     #lng = 30 
                     lng = newmsg.longitude
                     
-                    lat = b64encode(self.aes_cipher.encrypt(lat)).decode()
-                    lng = b64decode(self.aes_cipher.encrypt(lng)).decode()
+                    lat = self.aes_cipher.encrypt(str(lat)).decode()
+                    lng = self.aes_cipher.encrypt(str(lng)).decode()
                     data = json.dumps({'latitude':lat, 'longitude':lng})
                     await websocket.send(data)
 
