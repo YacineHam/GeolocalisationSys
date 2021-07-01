@@ -139,6 +139,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 #        KEYS= f.read().strip().split()
 #        RSA_PUBLIC_KEY = KEYS[0]
 #        RSA_PRIVATE_KEY = KEYS[1]
+
+
 (pubKey,privateKey)=rsa.newkeys(512)
 RSA_PUBLIC_KEY = pubKey
 RSA_PRIVATE_KEY = privateKey
+
+ADMIN_LOGIN_REDIRECT_URL="/map"
+LOGIN_URL = '/admin'

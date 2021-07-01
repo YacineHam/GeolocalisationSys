@@ -5,6 +5,9 @@ from urllib.parse import parse_qs
 from jwt import decode as jwt_decode
 from django.conf import settings
 
+
+
+
 class LocationSerializer(serializers.ModelSerializer):
     #car = serializers.SerializerMethodField('get_car')
                    
@@ -16,10 +19,12 @@ class LocationSerializer(serializers.ModelSerializer):
     #        user = CustomUser.objects.get(id=decoded_data["user_id"])
     #        print("**************************")
     #        print(user)
-    #        return user
+    # #        return user
+    lng =serializers.CharField()
+    lat =serializers.CharField()
     class Meta:
         model  = Location
-        fields = ['longitude','latitude']
+        fields = ['lng','lat']
         
         def create(self, validated_data):
             return Location.objects.create(**validated_data)  

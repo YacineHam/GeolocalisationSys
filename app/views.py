@@ -15,14 +15,18 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.tokens import UntypedToken
 from jwt import decode as jwt_decode
 from Geolocalisation_System import settings 
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required
 
-
-
+@user_passes_test(lambda u: u.is_staff)
+@login_required(login_url='/admin/')
 def map(request):
     users = CustomUser.objects.filter(is_car=True)
     print(users)
     return render(request, 'map.html', {'users': users})
 
+
+@user_passes_test(lambda u: u.is_staff)
 @api_view(['GET'])
 def get_current_location(request, id):
     car =CustomUser.objects.get(id=id)

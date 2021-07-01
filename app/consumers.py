@@ -10,7 +10,6 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from jwt import decode as jwt_decode
 from django.conf import settings
 from .models import CustomUser,Location
-from AesEverywhere import aes256
 from base64 import b64decode
 class TestConsumer(WebsocketConsumer):
 
@@ -31,8 +30,8 @@ class TestConsumer(WebsocketConsumer):
         location = json.loads(text_data)
         location = LocationSerializer(data=location)
         if location.is_valid():
-            longitude=location.data['longitude']
-            latitude =location.data['latitude']
+            longitude=location.data['lnt']
+            latitude =location.data['lat']
             user = self.scope["user"]
             aesKey=user.aes_key
             lng=b64decode(longitude)
