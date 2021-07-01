@@ -1,49 +1,144 @@
+<html>
 
+<head>
+  <link href='map.css' rel='stylesheet' />
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-<html >
-<body onLoad="initialize()">
-                  <div class="col-sm-offset-1" id="map_canvas" style="width:500; height:500"></div>
-                  <br>
-                  <input type="text" id="lat">
-                  <input type="text" id="lng">            
- <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=AIzaSyBJ-pKezQZTW7LeXQWMXqsfXGGpwzsYq3Y" type="text/javascript"></script>
-<style>
-  body{
-    text-align:center;
-  }
-  .gmap3{
-    margin: 20px auto;
-    border: 1px dashed #C0C0C0;
-    width: 500px;
-    height: 500px;
-  }
-</style>    
-<script type="text/javascript">
-   var map;
- function initialize() {
- var myLatlng = new google.maps.LatLng(36.85341604753753,10.176080866332995);
- var myOptions = {
- zoom: 14,
- minZoom:14,
- center: myLatlng,
- draggable:false,
- mapTypeId: google.maps.MapTypeId.SATELLITE
- }
-map = new google.maps.Map(document.getElementById("map_canvas"), myOptions); 
- var marker = new google.maps.Marker({
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <title>Map</title>
+</head>
 
-draggable: true,
-position: myLatlng, 
-map: map,
-  });
-google.maps.event.addListener(marker, 'dragend', function (event) {
-document.getElementById("lat").value = this.getPosition().lat();
-document.getElementById("lng").value = this.getPosition().lng();
-}
-); 
-}
-</script>
+<body>
+  <div style="display: flex;flex-direction: row;height: 80%;margin: 4%;">
+    <div style="flex-grow: 1;height: 8px;margin: 10px;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Cars</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td id="{{user.id}}" onclick="ism('{{user.id}}')">{{user.email}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div style="flex-grow: 5;">
+      <div id='map' style='display: block;height:80%'></div>
+    </div>
+  </div>
+  <script>
+
+  </script>
+  <script>
+    mapboxgl.accessToken = "pk.eyJ1IjoiY2hpa28zNjAiLCJhIjoiY2txanZxc3JkMDMyeTJ1cGkxZzVlZHYxNSJ9.NdRkV1ipVa-FPVJQyWVfAQ";
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v10',
+      center: [-0.6308500, 35.1899400],
+      zoom: 12
+    });
+    var url = "";
+    let ism = (id) => {url = 'http://localhost:8000/current/'+id; }
+    map.on('load', function () {
+      var request = new XMLHttpRequest();
+      window.setInterval(function () {
+        request.open('get', url, true);
+        request.onload = function () {
+          if (this.status >= 200 && this.status < 400) {
+            var json = JSON.parse(this.response);
+            map.getSource('drone').setData(json);
+            map.flyTo({
+              center: json.geometry.coordinates,
+              speed: 0.5
+            });
+          }
+        };
+        request.send();
+      }, 5000);
+
+      map.addSource('drone', { type: 'geojson', data: url });
+      map.addLayer({
+        'id': 'drone',
+        'type': 'symbol',
+        'source': 'drone',
+        'layout': {
+          'icon-image': 'car-15'
+        }
+      });
+    });
+
+    /*history of an element */
+    map.on('load', function () {
+      map.addSource('route', {
+        'type': 'geojson',
+        'data': {
+          'type': 'Feature',
+          'properties': {},
+          'geometry': {
+            'type': 'LineString',
+            'coordinates': [
+              [-0.6308500, 35.1899400],
+              [-0.6308200, 35.1899502],
+              [-0.6308400, 35.1899130],
+              [-0.6308900, 35.1899420],
+              [-0.6309300, 35.1899405],
+              [-0.6308200, 35.1899500],
+              [-0.6308300, 35.1899600],
+              [-0.6308400, 35.1899700],
+              [-0.6308500, 35.1899800],
+              [-0.6308600, 35.1899900],
+              [-0.6308700, 35.1899450],
+              [-0.6308800, 35.1899460],
+              [-0.6308900, 35.1899470],
+              [-0.6308950, 35.1899480],
+              [-0.6308850, 35.1899490],
+              [-0.6308750, 35.1899310],
+              [-0.6308500, 35.1899420],
+              [-0.6308600, 35.1899430],
+              [-0.6308700, 35.1899440],
+              [-0.6308800, 35.1899450],
+              [-0.6308900, 35.1899460],
+              [-0.6308500, 35.1899490],
+              [-0.6308500, 35.1899400],
+              [-0.6308500, 35.1899500],
+              [-0.6308500, 35.1899600],
+              [-0.6308500, 35.1899700],
+              [-0.6308500, 35.1899100],
+              [-0.6308500, 35.1899200],
+              [-0.6308500, 35.1899300],
+              [-0.6308500, 35.1899400],
+              [-0.6308500, 35.1899500],
+            ]
+          }
+        }
+      });
+      map.addLayer({
+        'id': 'route',
+        'type': 'line',
+        'source': 'route',
+        'layout': {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        'paint': {
+          'line-color': '#888',
+          'line-width': 8
+        }
+      });
+    });
+  </script>
 </body>
-</html>
 
+</html>

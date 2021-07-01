@@ -1,0 +1,11 @@
+.c {
+    background-color: black;
+    display: flex;
+    flex-direction: row;
+}
+.c1 {
+    flex-grow: 1;
+}
+.c2 {
+    flex-grow: 5;
+}
