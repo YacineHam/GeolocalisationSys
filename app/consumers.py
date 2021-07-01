@@ -10,6 +10,11 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from jwt import decode as jwt_decode
 from django.conf import settings
 from .models import CustomUser,Location
+<<<<<<< HEAD
+=======
+#from AesEverywhere import aes256
+from .AESCipher import AESCipher
+>>>>>>> 6e2cc3e0a682f6b07b2219904a68cefd1d2fdbb1
 from base64 import b64decode
 class TestConsumer(WebsocketConsumer):
 
@@ -29,14 +34,26 @@ class TestConsumer(WebsocketConsumer):
     def receive(self, text_data):
         location = json.loads(text_data)
         location = LocationSerializer(data=location)
+
         if location.is_valid():
+<<<<<<< HEAD
             longitude=location.data['lnt']
             latitude =location.data['lat']
+=======
+
+            print(location.data)
+            longitude=location.data['longitude']
+            latitude =location.data['latitude']
+
+>>>>>>> 6e2cc3e0a682f6b07b2219904a68cefd1d2fdbb1
             user = self.scope["user"]
-            aesKey=user.aes_key
-            lng=b64decode(longitude)
-            lat=b64decode(latitude)
-            loc=Location(car=user,longitude=aes256.decrypt(lng, aesKey).decode(),latitude=aes256.decrypt(lat,aesKey).decode())
+            aes_key = user.aes_key
+            aes_cipher = AESCipher(aes_key.encode())
+
+            lng= float(aes_cipher.decrypt(longitude))
+            lat= float(aes_cipher.decrypt(latitude))
+            print('latitude ',lat, lng)
+            loc=Location(car=user,longitude=lng,latitude=lat)
             loc.save()
             status={'status':'succes'}
             self.send(text_data=json.dumps(status))

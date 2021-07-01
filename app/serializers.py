@@ -19,12 +19,13 @@ class LocationSerializer(serializers.ModelSerializer):
     #        user = CustomUser.objects.get(id=decoded_data["user_id"])
     #        print("**************************")
     #        print(user)
-    # #        return user
-    lng =serializers.CharField()
-    lat =serializers.CharField()
+    #        return user
+    longitude = serializers.CharField()
+    latitude = serializers.CharField()
     class Meta:
+
         model  = Location
-        fields = ['lng','lat']
+        fields = ['longitude','latitude']
         
         def create(self, validated_data):
             return Location.objects.create(**validated_data)  
