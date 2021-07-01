@@ -13,6 +13,7 @@ from .models import CustomUser,Location
 from AesEverywhere import aes256
 from base64 import b64decode
 class TestConsumer(WebsocketConsumer):
+
     def connect(self):
         self.accept()
         print(self.scope['user'])
