@@ -12,4 +12,4 @@ class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username',)
+        fields = ('username','aes_key')
