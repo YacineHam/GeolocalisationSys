@@ -10,10 +10,8 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from jwt import decode as jwt_decode
 from django.conf import settings
 from .models import CustomUser,Location
-
-from AESCipher import AESCipher
-from base64 import b64decode,b64encode
-
+from AesEverywhere import aes256
+from base64 import b64decode
 class TestConsumer(WebsocketConsumer):
 
     def connect(self):
@@ -36,9 +34,11 @@ class TestConsumer(WebsocketConsumer):
             longitude=location.data['longitude']
             latitude =location.data['latitude']
             user = self.scope["user"]
-            loc=Location(car=user,longitude=longitude,latitude=latitude)
+            aesKey=user.aes_key
+            lng=b64decode(longitude)
+            lat=b64decode(latitude)
+            loc=Location(car=user,longitude=aes256.decrypt(lng, aesKey).decode(),latitude=aes256.decrypt(lat,aesKey).decode())
             loc.save()
-            print("location added")
             status={'status':'succes'}
             self.send(text_data=json.dumps(status))
         else:
