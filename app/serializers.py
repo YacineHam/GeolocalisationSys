@@ -17,7 +17,10 @@ class LocationSerializer(serializers.ModelSerializer):
     #        print("**************************")
     #        print(user)
     #        return user
+    longitude = serializers.CharField()
+    latitude = serializers.CharField()
     class Meta:
+
         model  = Location
         fields = ['longitude','latitude']
         

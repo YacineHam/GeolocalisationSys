@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import *
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-
+from datetime import datetime, timedelta
 from base64 import b64decode,b64encode
 
 from rest_framework.views import APIView
@@ -28,6 +28,14 @@ def get_current_location(request, id):
     car =CustomUser.objects.get(id=id)
     location = Location.objects.filter(car=car).last()
     return Response({"geometry": {"type": "Point", "coordinates": [location.longitude, location.latitude]}, "type": "Feature", "properties": {}})
+
+@api_view(['GET'])
+def get_history(request, id, time):
+    interval = datetime.now() - timedelta(hours=time)
+    car =CustomUser.objects.get(id=id)
+    locations = Location.objects.filter(car=car,timestamp__gte = interval).order_by("timestamp")
+    print([locations.longitude, locations.latitude])
+    return Response([locations.longitude, locations.latitude])
 
 
 

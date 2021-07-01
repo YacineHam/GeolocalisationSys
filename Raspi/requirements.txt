@@ -1,0 +1,7 @@
+requests
+serial
+pynmea2
+asyncio
+websockets
+Crypto
+rsa
