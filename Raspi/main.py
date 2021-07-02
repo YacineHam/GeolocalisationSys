@@ -19,8 +19,12 @@ import random
 import rsa
 
 from string import printable
+import os
 
+username = os.environ['CAR_NAME']
+passwd = os.environ['CAR_PASSWD']
 host = '10.42.0.1:8000'
+host = os.environ['GPS_HOST']
 #host = 'localhost:8000'
 http_host = 'http://' + host
 ws_host = 'ws://' + host
@@ -29,8 +33,7 @@ auth_url = http_host + '/api/token/'
 refresh_url = auth_url + '/refresh/'
 rsa_url = http_host + '/rsakey/'
 aes_url = http_host + '/aeskey/'
-username = 'test'
-passwd = 'test'
+
 class Car:
 
     username = ''
