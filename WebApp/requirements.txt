@@ -1,0 +1,14 @@
+Django==3.1.6
+djangorestframework==3.12.2
+djangorestframework-jwt
+djangorestframework-simplejwt
+PyJWT
+
+channels==3.0.3
+websockets==9.1
+websocket-client==1.0.0
+
+asyncio
+
+pycrypto
+rsa
