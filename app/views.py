@@ -1,8 +1,11 @@
+from typing import List, Type
 from django.shortcuts import render
+from rest_framework import response
 from .models import *
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from datetime import datetime, timedelta
+from datetime import timedelta
+from django.utils import timezone
 from base64 import b64decode,b64encode
 
 from rest_framework.views import APIView
@@ -20,7 +23,6 @@ from Geolocalisation_System import settings
 
 def map(request):
     users = CustomUser.objects.filter(is_car=True)
-    print(users)
     return render(request, 'map.html', {'users': users})
 
 @api_view(['GET'])
@@ -29,13 +31,13 @@ def get_current_location(request, id):
     location = Location.objects.filter(car=car).last()
     return Response({"geometry": {"type": "Point", "coordinates": [location.longitude, location.latitude]}, "type": "Feature", "properties": {}})
 
-@api_view(['GET'])
-def get_history(request, id, time):
-    interval = datetime.now() - timedelta(hours=time)
+def get_history(request, id):
     car =CustomUser.objects.get(id=id)
-    locations = Location.objects.filter(car=car,timestamp__gte = interval).order_by("timestamp")
-    print([locations.longitude, locations.latitude])
-    return Response([locations.longitude, locations.latitude])
+    locations = Location.objects.filter(car=car).order_by("timestamp")
+    locs = list()
+    for location in locations :
+        locs.append([location.longitude, location.latitude])
+    return render(request, 'history.html', {'locations': locs, 'car':car, 'center': locs[-1]})
 
 
 

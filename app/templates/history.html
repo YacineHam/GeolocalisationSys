@@ -1,0 +1,66 @@
+<html>
+
+<head>
+    <link href='map.css' rel='stylesheet' />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Map</title>
+</head>
+
+<body>
+    <center>
+        <h1>history for {{car.username}}</h1>
+
+    <div>
+        <div id='map' style='display: block;height:80%;width: 80%;'></div>
+    </div>
+</center>
+    <script>
+    </script>
+    <script>
+        mapboxgl.accessToken = "pk.eyJ1IjoiY2hpa28zNjAiLCJhIjoiY2txanZxc3JkMDMyeTJ1cGkxZzVlZHYxNSJ9.NdRkV1ipVa-FPVJQyWVfAQ";
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v10',
+            center: {{center}},
+            zoom: 12
+        });
+        map.on('load', function () {
+            map.addSource('route', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates':[
+                        {% for location in locations %}
+                            {{location}},
+                        {% endfor %}
+                        ]
+                    }
+                }
+            });
+            map.addLayer({
+                'id': 'route',
+                'type': 'line',
+                'source': 'route',
+                'layout': {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                'paint': {
+                    'line-color': '#888',
+                    'line-width': 8
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
