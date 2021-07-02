@@ -8,6 +8,8 @@ from datetime import timedelta
 from django.utils import timezone
 from base64 import b64decode,b64encode
 
+from datetime import datetime, timedelta
+from base64 import b64decode
 from rest_framework.views import APIView
 import rsa
 from django.http import JsonResponse
@@ -18,13 +20,17 @@ from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.tokens import UntypedToken
 from jwt import decode as jwt_decode
 from Geolocalisation_System import settings 
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required
 
-
-
+@user_passes_test(lambda u: u.is_staff)
+@login_required(login_url='/admin/')
 def map(request):
     users = CustomUser.objects.filter(is_car=True)
     return render(request, 'map.html', {'users': users})
 
+
+@user_passes_test(lambda u: u.is_staff)
 @api_view(['GET'])
 def get_current_location(request, id):
     car =CustomUser.objects.get(id=id)

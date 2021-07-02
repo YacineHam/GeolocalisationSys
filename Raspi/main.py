@@ -21,19 +21,19 @@ import rsa
 from string import printable
 
 host = '10.42.0.1:8000'
-host = 'localhost:8000'
+#host = 'localhost:8000'
 http_host = 'http://' + host
 ws_host = 'ws://' + host
-ws_url = ws_host + '/ws/test/'
+ws_url = ws_host + '/ws/location/'
 auth_url = http_host + '/api/token/'
 refresh_url = auth_url + '/refresh/'
 rsa_url = http_host + '/rsakey/'
 aes_url = http_host + '/aeskey/'
-name = 'test'
+username = 'test'
 passwd = 'test'
 class Car:
 
-    name = ''
+    username = ''
     passwd = ''
     access_token = ''
     refresh_token = ''
@@ -41,7 +41,7 @@ class Car:
 
 
     def __init__(self,name,passwd):
-        self.name = name
+        self.username = name
         self.passwd = passwd
         self.aes_key = ''.join(random.choices(printable,k=32)).encode() #Random.new().read(AES.block_size)
         self.aes_cipher = AESCipher(self.aes_key)
@@ -49,7 +49,7 @@ class Car:
         
 
     def authen(self,url):
-        data = json.dumps({'username':self.name, 'password':self.passwd})
+        data = json.dumps({'username':self.username, 'password':self.passwd})
         headers = {
             "Content-type": "application/json",
         }
@@ -94,17 +94,20 @@ class Car:
         async with websockets.connect(url) as websocket:
             
             while True :
-                
+
                 port = "/dev/ttyUSB0"
                 ser = serial.Serial(port,baudrate=9600,timeout=0.5)
                 dataout = pynmea2.NMEAStreamReader()
                 newdata = ser.readline().decode()
                 #print(newdata[0:6])
                 
-                #if newdata[0:6]=="$GPRMC" :
-                if True :
+                if newdata[0:6] in ["$GPRMC", "$GPGGA", "$GPGLL"] :
+                #if True :
                 
                     newmsg = pynmea2.parse(newdata)
+                    if not(newmsg.is_valid) :
+                        print("Invalid GPS data")
+                        continue 
                     #lat = 20 
                     lat = newmsg.latitude
                     #lng = 30 
@@ -113,15 +116,17 @@ class Car:
                     lat = self.aes_cipher.encrypt(str(lat)).decode()
                     lng = self.aes_cipher.encrypt(str(lng)).decode()
                     data = json.dumps({'latitude':lat, 'longitude':lng})
+                    print('Sending Location')
                     await websocket.send(data)
-
-                #gps="Latitude=" +str(lat) + " and Longitude=" +str(lng)
-                #print(gps)
 
 
 if __name__=='__main__' :
-
-    mycar = Car(name,passwd)
-    mycar.authen( auth_url )
-    mycar.rsa_enc_aes(rsa_url)
-    asyncio.get_event_loop().run_until_complete(mycar.get_send_location( ws_url + '?token=' + mycar.access_token))
+    while True :
+        try :
+            mycar = Car(username,passwd)
+            mycar.authen( auth_url )
+            mycar.rsa_enc_aes(rsa_url)
+        
+            asyncio.get_event_loop().run_until_complete(mycar.get_send_location( ws_url + '?token=' + mycar.access_token))
+        except Exception as e :
+            print(e)

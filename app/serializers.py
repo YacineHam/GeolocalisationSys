@@ -5,6 +5,9 @@ from urllib.parse import parse_qs
 from jwt import decode as jwt_decode
 from django.conf import settings
 
+
+
+
 class LocationSerializer(serializers.ModelSerializer):
     #car = serializers.SerializerMethodField('get_car')
                    

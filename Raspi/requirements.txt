@@ -1,7 +1,7 @@
 requests
-serial
+pyserial
 pynmea2
 asyncio
 websockets
-Crypto
+pycrypto
 rsa
