@@ -13,6 +13,21 @@
 </head>
 
 <body>
+    <div style="
+    background-color: #417690;
+    width: 100%;
+    height: 50px;
+    margin: 0px;
+    display: flex;
+">
+<div style="flex-grow: 1;padding-left: 40px;padding-top: 10px"><a href="/admin/" style='color: #F5DD5D;font-size: 24px;font-weight: 300'>Geolocalisation System</a></div>
+    <div id="user-tools" style="flex-grow: 1;text-align: right;padding-top: 15px;padding-right:40px;color: #FFFFCC"> 
+                WELCOME,<b>{{user.username}}</b>
+                <a href="{% url 'admin:index' %} " style='color: white'>Dashboard</a> /
+                <a href="{% url 'admin:password_change' %}" style='color: white'>Change password</a> /
+                <a href="{% url 'admin:logout' %}" style='color: white'>Log out</a>            
+</div>
+</div>
     <center>
         <h1>history for {{car.username}}</h1>
 
