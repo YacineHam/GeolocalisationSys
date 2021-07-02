@@ -22,13 +22,13 @@ create_file_gprs_in_peers(){
     echo > /etc/ppp/peers/gprs
     # echo user \"internet\" >> /etc/ppp/peers/gprs
     echo connect \"/usr/sbin/chat -v -t15 -f /etc/chatscripts/gprs -T internet\" >> /etc/ppp/peers/gprs
-    echo /dev/serial0 \\n9600 >> /etc/ppp/peers/gprs
+    echo /dev/serial0 \\n115200 >> /etc/ppp/peers/gprs
 
     echo noipdefault \\nusepeerdns \\ndefaultroute \\npersist \\nnoauth  >> /etc/ppp/peers/gprs
 
     echo nocrtscts\\nlocal >> /etc/ppp/peers/gprs
 
-    echo nlock \\nmodem \\npassive \\nnovj \\nhide-password  \\nholdoff 10 \\nmaxfail 0 \\ndebug >> /etc/ppp/peers/gprs
+    echo lock \\nmodem \\npassive \\nnovj \\nhide-password  \\nholdoff 10 \\nmaxfail 0 \\ndebug >> /etc/ppp/peers/gprs
 
     echo replacedefaultroute >> /etc/ppp/peers/gprs
 
