@@ -1,5 +1,5 @@
-<html>
 
+<html>
 <head>
   <link href='map.css' rel='stylesheet' />
   <meta charset="utf-8">
@@ -13,6 +13,22 @@
 </head>
 
 <body>
+<div style="
+    background-color: #417690;
+    width: 100%;
+    height: 50px;
+    margin: 0px;
+    display: flex;
+">
+<div style="flex-grow: 1;padding-left: 40px;padding-top: 10px"><a href="/admin/" style='color: #F5DD5D;font-size: 24px;font-weight: 300'>Geolocalisation System</a></div>
+    <div id="user-tools" style="flex-grow: 1;text-align: right;padding-top: 15px;padding-right:40px;color: #FFFFCC"> 
+                WELCOME,<b>{{user.username}}</b>
+                <a href="{% url 'admin:index' %} " style='color: white'>Dashboard</a> /
+                <a href="{% url 'admin:password_change' %}" style='color: white'>Change password</a> /
+                <a href="{% url 'admin:logout' %}" style='color: white'>Log out</a>            
+</div>
+</div>
+
   <div style="display: flex;flex-direction: row;height: 80%;margin: 4%;">
     <div style="flex-grow: 1;height: 8px;margin: 10px;">
       <table class="table">
@@ -24,7 +40,9 @@
         <tbody>
           {% for user in users %}
           <tr>
-            <td id="{{user.id}}" onclick="ism('{{user.id}}')">{{user.username}}</td>
+            <td id="{{user.id}}" >{{user.username}}</td>
+            <td><button type="button" onclick="currentlink('{{user.id}}')" >get location</button></td>
+            <td><button type="button" onclick="window.open('http://localhost:8000/history/{{user.id}}', '_blank').focus();">view history</button></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -46,23 +64,23 @@
       zoom: 12
     });
     var url = "";
-    let ism = (id) => {url = 'http://localhost:8000/current/'+id; }
+    let currentlink = (id) => { url = "http://localhost:8000/api/current/" + id; }
     map.on('load', function () {
       var request = new XMLHttpRequest();
       window.setInterval(function () {
-        request.open('get', url, true);
+        request.open('GET', url, true);
         request.onload = function () {
           if (this.status >= 200 && this.status < 400) {
             var json = JSON.parse(this.response);
             map.getSource('drone').setData(json);
             map.flyTo({
               center: json.geometry.coordinates,
-              speed: 0.5
+              speed: 2
             });
           }
         };
         request.send();
-      }, 5000);
+      }, 1000);
 
       map.addSource('drone', { type: 'geojson', data: url });
       map.addLayer({
@@ -71,66 +89,6 @@
         'source': 'drone',
         'layout': {
           'icon-image': 'car-15'
-        }
-      });
-    });
-
-    /*history of an element */
-    map.on('load', function () {
-      map.addSource('route', {
-        'type': 'geojson',
-        'data': {
-          'type': 'Feature',
-          'properties': {},
-          'geometry': {
-            'type': 'LineString',
-            'coordinates': [
-              [-0.6308500, 35.1899400],
-              [-0.6308200, 35.1899502],
-              [-0.6308400, 35.1899130],
-              [-0.6308900, 35.1899420],
-              [-0.6309300, 35.1899405],
-              [-0.6308200, 35.1899500],
-              [-0.6308300, 35.1899600],
-              [-0.6308400, 35.1899700],
-              [-0.6308500, 35.1899800],
-              [-0.6308600, 35.1899900],
-              [-0.6308700, 35.1899450],
-              [-0.6308800, 35.1899460],
-              [-0.6308900, 35.1899470],
-              [-0.6308950, 35.1899480],
-              [-0.6308850, 35.1899490],
-              [-0.6308750, 35.1899310],
-              [-0.6308500, 35.1899420],
-              [-0.6308600, 35.1899430],
-              [-0.6308700, 35.1899440],
-              [-0.6308800, 35.1899450],
-              [-0.6308900, 35.1899460],
-              [-0.6308500, 35.1899490],
-              [-0.6308500, 35.1899400],
-              [-0.6308500, 35.1899500],
-              [-0.6308500, 35.1899600],
-              [-0.6308500, 35.1899700],
-              [-0.6308500, 35.1899100],
-              [-0.6308500, 35.1899200],
-              [-0.6308500, 35.1899300],
-              [-0.6308500, 35.1899400],
-              [-0.6308500, 35.1899500],
-            ]
-          }
-        }
-      });
-      map.addLayer({
-        'id': 'route',
-        'type': 'line',
-        'source': 'route',
-        'layout': {
-          'line-join': 'round',
-          'line-cap': 'round'
-        },
-        'paint': {
-          'line-color': '#888',
-          'line-width': 8
         }
       });
     });

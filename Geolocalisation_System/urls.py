@@ -16,18 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt import views as jwt_views
-from app.views import map,get_current_location,get_history
+from app.views import *
 from app.views import GetRsaKey,StoreAesKey
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-    path('map/',map,name="map"),
+    path('',map,name="map"),
+<<<<<<< HEAD
+    path('api/current/<int:id>/',get_current_location,name="current"),
+=======
     path('current/<int:id>/',get_current_location,name="current"),
+>>>>>>> 2306fdd462f0681d84f9c08c5e12c883bd425dda
     path('history/<int:id>/',get_history,name="history"),
     path('rsakey/',GetRsaKey.as_view(),name="rsakey"),
-    path('aeskey/',StoreAesKey.as_view(),name="aeskey")
-
+    path('aeskey/',StoreAesKey.as_view(),name="aeskey"),
 ]
   

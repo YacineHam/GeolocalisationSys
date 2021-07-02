@@ -147,3 +147,6 @@ RSA_PRIVATE_KEY = privateKey
 
 ADMIN_LOGIN_REDIRECT_URL="/map"
 LOGIN_URL = '/admin'
+
+
+STATIC_ROOT='static/'
