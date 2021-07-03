@@ -43,7 +43,7 @@ def get_history(request, id):
     locs = list()
     for location in locations :
         locs.append([location.longitude, location.latitude])
-    return render(request, 'history.html', {'locations': locs, 'car':car, 'center': locs[-1]})
+    return render(request, 'history.html', {'locations': locs, 'car':car, 'center': locs[-1],'start': locs[0]})
 
 
 

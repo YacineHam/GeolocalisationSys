@@ -1,7 +1,7 @@
 <html>
+{% load static %}
 
 <head>
-    <link href='map.css' rel='stylesheet' />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
@@ -9,32 +9,26 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <title>Map</title>
+    <link rel="stylesheet" href="{% static 'css/history.css' %}">
+    <title>history for {{car.username}}</title>
+</head>
 </head>
 
 <body>
-    <div style="
-    background-color: #417690;
-    width: 100%;
-    height: 50px;
-    margin: 0px;
-    display: flex;
-">
-<div style="flex-grow: 1;padding-left: 40px;padding-top: 10px"><a href="/admin/" style='color: #F5DD5D;font-size: 24px;font-weight: 300'>Geolocalisation System</a></div>
-    <div id="user-tools" style="flex-grow: 1;text-align: right;padding-top: 15px;padding-right:40px;color: #FFFFCC"> 
-                WELCOME,<b>{{user.username}}</b>
-                <a href="{% url 'admin:index' %} " style='color: white'>Dashboard</a> /
-                <a href="{% url 'admin:password_change' %}" style='color: white'>Change password</a> /
-                <a href="{% url 'admin:logout' %}" style='color: white'>Log out</a>            
-</div>
-</div>
-    <center>
-        <h1>history for {{car.username}}</h1>
-
-    <div>
-        <div id='map' style='display: block;height:80%;width: 80%;'></div>
+    <div class ='c'>
+        <div class ='c1'><a class='title' href="/admin/">Geolocalisation System</a></div>
+        <div class ='c2'>History for "{{car.username}}"</div>
+        <div class ='c3' id="user-tools" >
+            WELCOME,<b>{{user.username}}</b>
+            <a href="{% url 'admin:index' %} " style='color: white'>Dashboard</a> /
+            <a href="{% url 'admin:password_change' %}" style='color: white'>Change password</a> /
+            <a href="{% url 'admin:logout' %}" style='color: white'>Log out</a>
+        </div>
     </div>
-</center>
+
+        <div>
+            <div id='map' style='display: block;height:100%;width: 100%;'></div>
+        </div>
     <script>
     </script>
     <script>
@@ -42,10 +36,13 @@
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v10',
-            center: {{center}},
-            zoom: 12
+            center: {{ center }},
+        zoom: 4
         });
         map.on('load', function () {
+            window.setInterval(function () {
+                map.getSource('route').setData(url);
+            }, 1000);
             map.addSource('route', {
                 'type': 'geojson',
                 'data': {
@@ -53,27 +50,41 @@
                     'properties': {},
                     'geometry': {
                         'type': 'LineString',
-                        'coordinates':[
-                        {% for location in locations %}
-                            {{location}},
-                        {% endfor %}
+                        'coordinates': [
+                            {% for location in locations %}
+                            {{ location }},
+            {% endfor %}
                         ]
                     }
                 }
             });
-            map.addLayer({
-                'id': 'route',
-                'type': 'line',
-                'source': 'route',
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round'
-                },
-                'paint': {
-                    'line-color': '#888',
-                    'line-width': 8
-                }
-            });
+        var el = document.createElement('div');
+        el.className = 'marker';
+        el.style.backgroundImage =
+            'url(https://o.remove.bg/downloads/a5582d2e-31c0-421b-a108-bc9eefeba392/217-2174484_blue-home-button-png-www-pixshark-com-images-galleries-linked-in-logo-removebg-preview.png)';
+        el.style.width = '40px';
+        el.style.height = '40px';
+        el.style.backgroundSize = '100%';
+        var markerstart = new mapboxgl.Marker(el)
+            .setLngLat({{ start }})
+            .addTo(map);
+
+        var marker = new mapboxgl.Marker({ 'color': '#ff0000' })
+            .setLngLat({{ center }})
+            .addTo(map);
+        map.addLayer({
+            'id': 'route',
+            'type': 'line',
+            'source': 'route',
+            'layout': {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            'paint': {
+                'line-color': '#888',
+                'line-width': 8
+            }
+        });
         });
     </script>
 </body>

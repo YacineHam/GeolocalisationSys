@@ -133,6 +133,9 @@ AUTH_USER_MODEL = 'app.CustomUser'
 
 ASGI_APPLICATION = "Geolocalisation_System.asgi.application"
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
