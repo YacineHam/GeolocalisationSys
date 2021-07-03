@@ -1,0 +1,87 @@
+.c {
+  background-color: #417690;
+  width: 100%;
+  height: 10%;
+  margin: 0px;
+  display: flex;
+}
+.c1 {
+  flex-grow: 1;
+  padding-left: 2%;
+  padding-top: 1.5%;  
+}
+.c3 {
+  flex-grow: 1;
+  text-align: right;
+  padding-right:40px;
+  color: #FFFFCC;
+  padding-top: 1.5%
+}  
+.title {
+  color: #F5DD5D;
+  font-size: 24px;
+  font-weight: 300
+}
+
+.name {
+  font-weight: bold;
+  font-size: 18;
+  padding-right: 20px;
+}
+
+/* The side navigation menu */
+.sidebar {
+    margin: 0;
+    padding: 0;
+    width: 350px;
+    background-color: #f1f1f1;
+    position: fixed;
+    height: 90%;
+    overflow: auto;
+  }
+  
+  /* Sidebar links */
+  .sidebar div {
+    display: inline-block;
+    color: black;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-decoration: none;
+  }
+  
+  /* Active/current link */
+  .sidebar a.active {
+    background-color: #04AA6D;
+    color: white;
+  }
+  
+  /* Links on mouse-over */
+  .sidebar a:hover:not(.active) {
+    background-color: #555;
+  }
+  
+  /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
+  div.content {
+    margin-left: 300px;
+    padding: 1px 16px;
+    height: 90%;
+  }
+  
+  /* On screens that are less than 700px wide, make the sidebar into a topbar */
+  @media screen and (max-width: 700px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {float: left;}
+    div.content {margin-left: 0;}
+  }
+  
+  /* On screens that are less than 400px, display the bar vertically, instead of horizontally */
+  @media screen and (max-width: 400px) {
+    .sidebar a {
+      text-align: center;
+      float: none;
+    }
+  }

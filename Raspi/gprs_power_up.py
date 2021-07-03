@@ -1,13 +1,28 @@
 import RPi.GPIO as GPIO
 import time
+import serial  
 
-GPIO.setmode(GPIO.BCM)
+port = serial.Serial("/dev/ttyAMA0", baudrate=9600, timeout=1)
 
-GPIO.setwarnings(False)
-GPIO.setup(21,GPIO.OUT)
+while True :
+    try:
+        port.write(('AT'+'\r\n').encode())
+        rcv = port.read(20)
+        if 'OK' not in rcv.decode() :
+            print('Powering up the GPRS Module')
+            GPIO.setmode(GPIO.BCM)
 
-GPIO.output(21,GPIO.HIGH)
-time.sleep(2)
-GPIO.output(21,GPIO.LOW)
-print('GPRS Module was Powered ON')
+            GPIO.setwarnings(False)
+            GPIO.setup(21,GPIO.OUT)
+
+            GPIO.output(21,GPIO.HIGH)
+            time.sleep(2)
+            GPIO.output(21,GPIO.LOW)
+        else :
+            print('GPRS is Connected')
+            break
+    except Exception as e:
+        print(e)
+
+print('GPRS Module is ON')
 GPIO.cleanup()

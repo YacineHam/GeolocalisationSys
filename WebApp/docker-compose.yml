@@ -10,4 +10,7 @@ services:
       - ./app:/app
     command: >
       sh -c  "python manage.py migrate &&
+              python manage.py makemigrations &&
+              cat /create_superuser.py | ./manage.py shell &&
+              python manage.py collectstatic --no-input
               python manage.py runserver 0.0.0.0:80"
