@@ -41,12 +41,13 @@ def get_history(request, id):
     car =CustomUser.objects.get(id=id)
     locations = Location.objects.filter(car=car).order_by("timestamp")
     locs = list()
-    for location in locations :
-        locs.append([location.longitude, location.latitude])
-    return render(request, 'history.html', {'locations': locs, 'car':car, 'center': locs[-1],'start': locs[0]})
-
-
-
+    if (not locations):
+        return render(request, 'history.html', {'car':car,})
+    else:
+        for location in locations :
+            locs.append([location.longitude, location.latitude])
+        return render(request, 'history.html', {'locations': locs, 'car':car, 'center': locs[-1],'start': locs[0]})
+        
 #Add Retruive Public Key based On jwt
 class StoreAesKey(APIView):
 

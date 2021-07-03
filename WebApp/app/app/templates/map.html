@@ -15,12 +15,12 @@
 
 <body>
   <div class ='c'>
-    <div class ='c1'><a class='title' href="/admin/">Geolocalisation System</a></div>
+    <div class ='c1'><a class='title' href="/admin/" style='font-weight: bold;' >Geolocalisation System</a></div>
     <div class ='c3' id="user-tools" >
-        WELCOME,<b>{{user.username}}</b>
-        <a href="{% url 'admin:index' %} " style='color: white'>Dashboard</a> /
-        <a href="{% url 'admin:password_change' %}" style='color: white'>Change password</a> /
-        <a href="{% url 'admin:logout' %}" style='color: white'>Log out</a>
+        WELCOME,<b  style='font-size: 20px;' >{{user.username}}</b>
+        <a href="{% url 'admin:index' %} " style='font-size: 20px;color: white'>Dashboard</a> /
+        <a href="{% url 'admin:password_change' %}" style='font-size: 20px;color: rgb(228, 197, 197)'>Change password</a> /
+        <a href="{% url 'admin:logout' %}" style='font-size: 20px;color: white'>Log out</a>
     </div>
 </div>
   <div class="sidebar">
@@ -28,7 +28,7 @@
     {% for user in users %}
     <div> <div class="name">{{user.username}}</div>
       <button type="button" onclick="currentlink('{{user.id}}')">Get location</button>
-      <button type="button" onclick="window.open('http://localhost:8000/history/{{user.id}}', '_blank').focus();">View history</button></div>
+      <a href="history/{{user.id}}" target="_blank" ><button type="button"  >history</button></a></div>
       <hr style="width: 250px;align-items: center; height:2px;border-width:0;color:gray;background-color:gray"/>
     {% endfor %}
   </div>
@@ -47,7 +47,7 @@
       zoom: 12
     });
     var url = "";
-    let currentlink = (id) => { url = "http://localhost:8000/api/current/" + id; }
+    let currentlink = (id) => { url = window.location+ "api/current/" + id+"/"; }
     map.on('load', function () {
       var request = new XMLHttpRequest();
       window.setInterval(function () {

@@ -16,13 +16,13 @@
 
 <body>
     <div class ='c'>
-        <div class ='c1'><a class='title' href="/admin/">Geolocalisation System</a></div>
+        <div class ='c1'><a class='title' href="/admin/" style='font-weight: bold;' >Geolocalisation System</a></div>
         <div class ='c2'>History for "{{car.username}}"</div>
         <div class ='c3' id="user-tools" >
-            WELCOME,<b>{{user.username}}</b>
-            <a href="{% url 'admin:index' %} " style='color: white'>Dashboard</a> /
-            <a href="{% url 'admin:password_change' %}" style='color: white'>Change password</a> /
-            <a href="{% url 'admin:logout' %}" style='color: white'>Log out</a>
+            WELCOME,<b  style='font-size: 20px;' >{{user.username}}</b>
+            <a href="{% url 'admin:index' %} " style='font-size: 20px;color: white'>Dashboard</a> /
+            <a href="{% url 'admin:password_change' %}" style='font-size: 20px;color: rgb(228, 197, 197)'>Change password</a> /
+            <a href="{% url 'admin:logout' %}" style='font-size: 20px;color: white'>Log out</a>
         </div>
     </div>
 
@@ -36,7 +36,9 @@
         var map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v10',
+            {% if center %}
             center: {{ center }},
+            {% endif %}
         zoom: 4
         });
         map.on('load', function () {
@@ -53,11 +55,13 @@
                         'coordinates': [
                             {% for location in locations %}
                             {{ location }},
-            {% endfor %}
+                    {% endfor %}
                         ]
                     }
                 }
             });
+
+        {% if start %}
         var el = document.createElement('div');
         el.className = 'marker';
         el.style.backgroundImage =
@@ -68,10 +72,12 @@
         var markerstart = new mapboxgl.Marker(el)
             .setLngLat({{ start }})
             .addTo(map);
-
+        {% endif %}
+        {% if center %}
         var marker = new mapboxgl.Marker({ 'color': '#ff0000' })
             .setLngLat({{ center }})
             .addTo(map);
+            {% endif %}
         map.addLayer({
             'id': 'route',
             'type': 'line',
