@@ -69,13 +69,21 @@
         el.style.width = '30px';
         el.style.height = '30px';
         el.style.backgroundSize = '100%';
+        var popup = new mapboxgl.Popup({ offset: 25 }).setText(
+            '{{ firsttime }}'
+        );       
         var markerstart = new mapboxgl.Marker(el)
             .setLngLat({{ start }})
+            .setPopup(popup)
             .addTo(map);
         {% endif %}
         {% if center %}
+        var popup1 = new mapboxgl.Popup({ offset: 25 }).setText(
+            '{{ lasttime }}'
+        );            
         var marker = new mapboxgl.Marker({ 'color': '#ff0000' })
             .setLngLat({{ center }})
+            .setPopup(popup1)
             .addTo(map);
             {% endif %}
         map.addLayer({
