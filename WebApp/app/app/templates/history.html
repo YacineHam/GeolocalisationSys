@@ -65,9 +65,9 @@
         var el = document.createElement('div');
         el.className = 'marker';
         el.style.backgroundImage =
-            'url(https://o.remove.bg/downloads/a5582d2e-31c0-421b-a108-bc9eefeba392/217-2174484_blue-home-button-png-www-pixshark-com-images-galleries-linked-in-logo-removebg-preview.png)';
-        el.style.width = '40px';
-        el.style.height = '40px';
+            'url({% static 'home.png' %})';
+        el.style.width = '30px';
+        el.style.height = '30px';
         el.style.backgroundSize = '100%';
         var markerstart = new mapboxgl.Marker(el)
             .setLngLat({{ start }})
