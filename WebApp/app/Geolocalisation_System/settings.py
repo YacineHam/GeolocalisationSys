@@ -145,7 +145,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 #        RSA_PRIVATE_KEY = KEYS[1]
 
 
-(pubKey,privateKey)=rsa.newkeys(512)
+(pubKey,privateKey)=rsa.newkeys(2048)
 RSA_PUBLIC_KEY = pubKey
 RSA_PRIVATE_KEY = privateKey
 
