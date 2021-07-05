@@ -2,7 +2,7 @@
 
 python3 /home/pi/Raspi/gprs_power_up.py
 
-sleep 10
+sleep 30
 
 . /home/pi/Raspi/export_nam_pass_host.sh
 

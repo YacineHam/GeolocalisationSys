@@ -14,7 +14,7 @@ enable_swap_uart(){
 }
 
 install_required(){
-    sudo apt_get install minicom ppp screen elinks
+    sudo apt-get install minicom ppp screen elinks
 }
 
 create_file_gprs_in_peers(){
@@ -22,7 +22,7 @@ create_file_gprs_in_peers(){
     echo > /etc/ppp/peers/gprs
     # echo user \"internet\" >> /etc/ppp/peers/gprs
     echo connect \"/usr/sbin/chat -v -t15 -f /etc/chatscripts/gprs -T internet\" >> /etc/ppp/peers/gprs
-    echo /dev/serial0 \\n115200 >> /etc/ppp/peers/gprs
+    echo /dev/serial0 \\n9600 >> /etc/ppp/peers/gprs
 
     echo noipdefault \\nusepeerdns \\ndefaultroute \\npersist \\nnoauth  >> /etc/ppp/peers/gprs
 
@@ -63,8 +63,8 @@ sudo set_interface_ppp
 
 . /home/pi/Raspi/set_username_passwd.sh
 
-sudo pip3 install /home/pi/Raspi/requirements.txt
-pip3 install /home/pi/Raspi/requirements.txt
+sudo pip3 install -r /home/pi/Raspi/requirements.txt
+pip3 install -r /home/pi/Raspi/requirements.txt
 
 sudo echo '#!/bin/sh -e\n\n. /home/pi/Raspi/on_boot_script.sh & \nexit 0'>  /etc/rc.local
 
