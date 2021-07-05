@@ -8,7 +8,7 @@
 .c1 {
   flex-grow: 1;
   padding-left: 2%;
-  padding-top: 1.5%;  
+  padding-top: 1.5%;
 }
 .c3 {
   flex-grow: 1;
@@ -22,18 +22,36 @@
   font-size: 24px;
   font-weight: 300
 }
-
+.side-elem {
+  display: inline-flex;
+}
+.btn-1 {
+  flex-shrink: 1;
+  flex-grow: 1;
+  flex: 1;
+  width: 30%;
+}
+.btn-2 {
+  flex-shrink: 1;
+  flex-grow: 1;
+  flex: 1;
+  width: 30%;
+}
 .name {
+  flex-shrink: 1;
+  flex-grow: 1;
+  flex: 1;
   font-weight: bold;
   font-size: 18;
   padding-right: 20px;
+  width: 30%;
 }
 
 /* The side navigation menu */
 .sidebar {
     margin: 0;
     padding: 0;
-    width: 350px;
+    width: 16%;
     background-color: #f1f1f1;
     position: fixed;
     height: 90%;
@@ -62,7 +80,7 @@
   
   /* Page content. The value of the margin-left property should match the value of the sidebar's width property */
   div.content {
-    margin-left: 300px;
+    margin-left: 16%;
     padding: 1px 16px;
     height: 90%;
   }

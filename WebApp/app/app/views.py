@@ -46,7 +46,7 @@ def get_history(request, id):
     else:
         for location in locations :
             locs.append([location.longitude, location.latitude])
-        return render(request, 'history.html', {'locations': locs, 'car':car, 'center': locs[-1],'start': locs[0]})
+        return render(request, 'history.html', {'locations': locs, 'car':car, 'center': locs[-1],'lasttime':locations.last().timestamp,'firsttime':locations.first().timestamp,'start': locs[0]})
         
 #Add Retruive Public Key based On jwt
 class StoreAesKey(APIView):
